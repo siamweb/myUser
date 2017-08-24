@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      ระบบจัดการสมาชิก
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+ 
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let user of users | async">
+      <ion-item>
+  
+     <p>{{ "หมายเลขสมาชิก:" + user.id }}</p>
+     <p>{{ user.firstname + "  " +  user.lastname }}</p>
+     <p>{{ "เบอร์ติดต่อ " +  user.tel }}</p>
+
+      </ion-item>
+     
+      <ion-item-options side="right">
+        <button ion-button color="default">
+        <ion-icon name="build"></ion-icon>
+        แก้ไข
+        </button>
+        
+        <button ion-button color="danger" (click)="removeUser(user.id)">
+        <ion-icon name="trash"></ion-icon>
+        ลบ
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+ 
+  </ion-list>
+ 
+  <ion-fab right bottom>
+    <button ion-fab (click)="addUser()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>
