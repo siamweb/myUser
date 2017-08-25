@@ -20,10 +20,14 @@ export class UserServiceProvider {
  
   public getUsers() {
 
-
     return this.http.get(this.apiUrl + 'users')
       .map(response => response.json().result);
       
+  }
+
+  public getOneUser(userId){
+    return this.http.get(this.apiUrl + 'users/' + userId)
+      .map(response => response.json().result);
   }
  
   public addUser(firstname,lastname,tel) {
@@ -31,6 +35,12 @@ export class UserServiceProvider {
       .map(response => response.json());
   }
  
+  public editUser(userId,firstname,lastname,tel){
+      return this.http.put(this.apiUrl + 'users/' + userId, {'firstname': firstname, 'lastname': lastname, 'tel': tel })
+      .map(response => response.json());
+  }
+
+
   public deleteUser(userId) {
     return this.http.delete(this.apiUrl + 'users/' + userId)
       .map(response => response.json());

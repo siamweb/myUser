@@ -14,6 +14,7 @@ import { NavController, AlertController, ToastController } from 'ionic-angular';
 export class HomePage {
 
    users: Observable<any>;
+   oneuser: any = {};
  
   constructor(public navCtrl: NavController, public UserServiceProvider: UserServiceProvider, public alertCtrl: AlertController, public toastCtrl: ToastController) {
     this.loadUsers();
@@ -23,6 +24,7 @@ export class HomePage {
     this.users = this.UserServiceProvider.getUsers();
     
   }
+
  
   addUser() {
     let prompt = this.alertCtrl.create({
@@ -31,8 +33,7 @@ export class HomePage {
       inputs: [
         {
           name: 'firstname',
-          placeholder: 'ชื่อ',
-          value:'ddd'
+          placeholder: 'ชื่อ'
         },
         {
           name: 'lastname',
@@ -61,6 +62,59 @@ export class HomePage {
     prompt.present();
   }
  
+  editUser(id) {
+    
+
+    this.UserServiceProvider.getOneUser(id).subscribe(data => { 
+     
+        
+      let prompt = this.alertCtrl.create({
+      title: 'แก้ไขข้อมูลสมาชิก',
+      message: "กรุณากรอกข้อมูล",
+      inputs: [
+        {
+          name: 'firstname',
+          placeholder: 'ชื่อ',
+          value: data.firstname
+        
+        },
+        {
+          name: 'lastname',
+          placeholder: 'นามสกุล',
+          value: data.lastname
+        },
+        {
+          name: 'tel',
+          placeholder: 'เบอร์โทรศัพท์',
+          value: data.tel
+        },
+      ],
+      buttons: [
+        {
+          text: 'ยกเลิก'
+        },
+        {
+          text: 'บันทึก',
+          handler: data => {
+              this.UserServiceProvider.editUser(id,data.firstname,data.lastname,data.tel).subscribe(data => {
+              this.showToast(data.msg);
+              this.loadUsers();
+            });
+          }
+        }
+      ]
+    });
+    prompt.present();
+
+
+
+
+    });
+    
+   
+
+  }
+
   removeUser(id) {
     this.UserServiceProvider.deleteUser(id).subscribe(data => {
       this.showToast(data.msg);
